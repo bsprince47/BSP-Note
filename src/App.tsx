@@ -4,6 +4,9 @@ import { allSync } from "./SyncEngine";
 import { useEffect } from "react";
 import { useGlobalStore } from "./GlobalProvider";
 import { lastSyncedCheck } from "./SyncEngine";
+import { registerSW } from "virtual:pwa-register";
+
+registerSW();
 
 function App() {
   const { setSyncLoading } = useGlobalStore();
