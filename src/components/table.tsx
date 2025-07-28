@@ -5,7 +5,7 @@ import {
   type Row,
   type ColumnDef,
 } from "@tanstack/react-table";
-import { GripVertical, StickyNote } from "lucide-react";
+import { GripVertical } from "lucide-react";
 import { BlockNoteSidebar } from "./blocknotesidebar";
 import { useMemo } from "react";
 import { toast } from "sonner";

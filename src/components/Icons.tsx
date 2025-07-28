@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useGlobalStore } from "@/GlobalProvider";
-import { DbIcon } from "./dbIcon";
 import {
   Popover,
   PopoverContent,
