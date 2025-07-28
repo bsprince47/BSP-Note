@@ -7,7 +7,8 @@ import {
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useGlobalStore, useIcons } from "@/GlobalProvider";
+import { useGlobalStore } from "@/GlobalProvider";
+import { DbIcon } from "./dbIcon";
 import {
   Popover,
   PopoverContent,
@@ -25,11 +26,11 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { db } from "@/Dexie";
-import { nanoid } from "nanoid";
+import { useLiveQuery } from "dexie-react-hooks";
 
 export function Icons() {
+  const iconDbArray = useLiveQuery(() => db.Icons.toArray(), []) || [];
   const { SyncedQueue, openIcon, setOpenIcon } = useGlobalStore();
-  const icons = useIcons();
 
   const [open, setOpen] = useState(false);
   const [icon, setIcon] = useState("Quran");
@@ -48,8 +49,8 @@ export function Icons() {
               aria-expanded={open}
               className="justify-between"
             >
-              {icon
-                ? icons.find((item) => item.value === icon)?.value
+              {iconDbArray
+                ? iconDbArray.find((item) => item.value === icon)?.value
                 : `Select icon`}
               <ChevronsUpDown className="opacity-50" />
             </Button>
@@ -66,21 +67,19 @@ export function Icons() {
                     if (!iconName) return;
                     if (!iconURL) return;
                     setIcon(iconName);
-                    const id = nanoid();
                     const item = {
-                      id,
                       value: iconName,
                       url: iconURL,
                     };
                     await db.Icons.put(item);
-                    await SyncedQueue(id, "Icons", "add");
+                    await SyncedQueue(iconName, "Icons", "add");
                   }
                 }}
               />
               <CommandList>
                 <CommandEmpty>No framework found.</CommandEmpty>
                 <CommandGroup>
-                  {icons
+                  {iconDbArray
                     .filter((item: any) => item.value)
                     .map((item) => (
                       <CommandItem
@@ -95,8 +94,10 @@ export function Icons() {
                         <div className="flex gap-2 items-center">
                           <img
                             src={
-                              icons.find((v) => v.value === item.value)?.url ||
-                              icons.find((v) => v.value === "placeholder")?.url
+                              iconDbArray.find((v) => v.value === item.value)
+                                ?.url ||
+                              iconDbArray.find((v) => v.value === "placeholder")
+                                ?.url
                             }
                             className="h-6 aspect-square"
                           />

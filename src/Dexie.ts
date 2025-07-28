@@ -18,7 +18,6 @@ export type ClassorBook = {
   bookId: string;
 };
 export type Icons = {
-  id: string;
   value: string;
   url: string;
 };
@@ -46,7 +45,7 @@ export class BSPNoteDatabase extends Dexie {
       Items:
         "id, title,guess,content,renderRange,renderDate,classId, bookId, priority",
       ClassorBook: "id,classId,bookId",
-      Icons: "id, value, url",
+      Icons: "value, url",
       SyncedQueue: "id, table, type, status", // indexable
       SyncMeta: "key", // indexable
     });

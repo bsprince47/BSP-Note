@@ -3,15 +3,20 @@ import { Toaster } from "@/components/ui/sonner";
 import { allSync } from "./SyncEngine";
 import { useEffect } from "react";
 import { useGlobalStore } from "./GlobalProvider";
+import { lastSyncedCheck } from "./SyncEngine";
 
 function App() {
   const { setSyncLoading } = useGlobalStore();
   useEffect(() => {
-    allSync(setSyncLoading);
+    (async () => {
+      await lastSyncedCheck();
 
-    setInterval(() => {
       allSync(setSyncLoading);
-    }, 30000);
+
+      setInterval(() => {
+        allSync(setSyncLoading);
+      }, 30000);
+    })();
   }, []);
 
   return (

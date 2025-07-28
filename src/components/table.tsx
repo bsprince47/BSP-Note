@@ -32,6 +32,7 @@ import {
 import { db } from "@/Dexie";
 import type { PageItem } from "@/Dexie";
 import { useDialogStore } from "@/stores/alert-dialog-store";
+import { DbIcon } from "./dbIcon";
 // import { Fdb } from "@/firebase";
 // import { doc } from "firebase/firestore";
 
@@ -46,7 +47,6 @@ export default function Table() {
     setNanoPageId,
     SyncedQueue,
     selectedFilter,
-    icons,
     renderRangeData,
   } = useGlobalStore();
   const data = useFilteredPages(selectedFilter); // ← this replaces pages
@@ -113,7 +113,7 @@ export default function Table() {
   });
   const titleBodyTemplate = () => ({
     header: "Title",
-    size: 300,
+    size: 250,
     cell: ({ row }: { row: Row<PageItem> }) => {
       const item = row.original; // 👈 full row data
 
@@ -122,26 +122,26 @@ export default function Table() {
           onClick={(e) => {
             e.currentTarget.firstElementChild?.classList.toggle("blur-sm");
           }}
-          className="p-2 font-bold relative cursor-pointer"
+          className="p-2 group font-bold relative cursor-pointer"
         >
-          <span className="blur-sm">{item.title}</span>
-
-          <span
-            onClick={() => {
-              setOpenSidebar(true);
-              setNanoPageId(item.id);
-              setPageTitle(item.title);
-              setPageGuess(item.guess);
-              setPageContent(
-                item.content ??
-                  `[{type: "paragraph",content: [{type: "text",text: "",styles: {},},],},]`
-              );
-              setPageClass(item.classId);
-              setPageBook(item.bookId);
-            }}
-            className="absolute right-0 mr-2 text-neutral-400 cursor-pointer"
-          >
-            <StickyNote />
+          <span className="flex gap-1 blur-sm items-center">
+            <DbIcon keyName={item.bookId} />
+            <span
+              onClick={() => {
+                setOpenSidebar(true);
+                setNanoPageId(item.id);
+                setPageTitle(item.title);
+                setPageGuess(item.guess);
+                setPageContent(
+                  item.content ??
+                    `[{type: "paragraph",content: [{type: "text",text: "",styles: {},},],},]`
+                );
+                setPageClass(item.classId);
+                setPageBook(item.bookId);
+              }}
+            >
+              {item.title}
+            </span>
           </span>
         </div>
       );
@@ -163,8 +163,8 @@ export default function Table() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  Are you want to render after given date then ok other wise
+                  cancel
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -198,8 +198,10 @@ export default function Table() {
                 <AlertDialogAction
                   onClick={async () => {
                     try {
-                      const newRenderRange =
-                        Math.min(item.renderRange || 0 + 1, 9) || 1;
+                      const newRenderRange = Math.min(
+                        (item?.renderRange ?? 0) + 1,
+                        9
+                      );
 
                       await db.Items.update(item.id, {
                         ...item,
@@ -232,7 +234,7 @@ export default function Table() {
   });
   const guessBodyTemplate = () => ({
     header: "Guess",
-    size: 500,
+    size: 300,
     cell: ({ row }: { row: Row<PageItem> }) => {
       const item = row.original; // 👈 full row data
 
@@ -245,19 +247,14 @@ export default function Table() {
       const item = row.original; // 👈 full row data
 
       const key =
-        field === "classId" ? item.classId.trim() : item.bookId.trim();
-      // const icon = icons[key] || icons.placeholder;
+        field === "classId"
+          ? item.classId.trim()
+          : item.bookId.trim() || "placeholder";
 
       return (
         <div className="p-2 text-center flex items-center gap-2">
-          <img
-            src={
-              icons.find((v) => v.value === key)?.url ||
-              icons.find((v) => v.value === "placeholder")?.url
-            }
-            className="h-7 aspect-square"
-            alt=""
-          />
+          <DbIcon keyName={key} />
+
           <span>
             {field === "classId" ? item.classId.trim() : item.bookId.trim()}
           </span>

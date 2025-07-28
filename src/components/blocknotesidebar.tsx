@@ -39,6 +39,7 @@ export function BlockNoteSidebar() {
     pageContent,
     nanoPageId,
     SyncedQueue,
+    isReadingMode,
   } = useGlobalStore();
   // const editor = useCreateBlockNote({
   //   initialContent:
@@ -129,14 +130,16 @@ export function BlockNoteSidebar() {
   return (
     <Sheet open={openSidebar} onOpenChange={setOpenSidebar}>
       <DialogTitle className="hidden">Edit Page</DialogTitle>
-      <SheetContent className="w-full sm:max-w-1/2">
+      <SheetContent className="w-full sm:max-w-1/2 overflow-auto">
         <input
+          inert={isReadingMode ? true : false}
           className="text-xl font-bold w-full bg-transparent focus:outline-none px-2"
           value={pageTitle}
           placeholder="Page Title"
           onChange={(e) => setPageTitle(e.target.value)}
         />
         <input
+          inert={isReadingMode ? true : false}
           className="w-full bg-transparent focus:outline-none px-2 text-muted-foreground text-sm"
           value={pageGuess}
           placeholder="Page Guess"
@@ -145,10 +148,17 @@ export function BlockNoteSidebar() {
         <ClassBookComboBox classorbook="class" />
         <ClassBookComboBox classorbook="book" />
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
-          {editor && <BlockNoteView editor={editor} />}
+          {editor && (
+            <BlockNoteView
+              editable={!isReadingMode}
+              editor={editor}
+              theme={"light"}
+            />
+          )}
         </div>
         <SheetFooter>
           <Button
+            inert={isReadingMode ? true : false}
             type="submit"
             onClick={async () => {
               const currentContent = editor

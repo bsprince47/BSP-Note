@@ -8,6 +8,8 @@ import {
   Database,
   Loader2,
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 import {
   Sidebar,
@@ -28,6 +30,7 @@ import { useEffect, useState } from "react";
 import { allSync } from "@/SyncEngine";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/firebase";
+import { DbIcon } from "./dbIcon";
 
 export function AppSidebar() {
   const [user, setUser] = useState(null);
@@ -40,10 +43,11 @@ export function AppSidebar() {
     setPageContent,
     setPagePriority,
     setSelectedFilter,
-    icons,
     syncLoading,
     setSyncLoading,
     setOpenIcon,
+    isReadingMode,
+    setIsReadingMode,
   } = useGlobalStore();
   const itemList = useLiveQuery(() => db.ClassorBook.toArray(), [], []);
 
@@ -151,14 +155,7 @@ export function AppSidebar() {
                       className="flex items-center justify-between cursor-pointer px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       <div className="flex gap-2">
-                        <img
-                          src={
-                            icons.find((v) => v.value === item)?.url ||
-                            icons.find((v) => v.value === "placeholder")?.url
-                          }
-                          alt=""
-                          className="h-6 aspect-square"
-                        />
+                        <DbIcon keyName={item} />
                         <span className="font-bold">{item}</span>
                       </div>
                       {true && (
@@ -185,16 +182,7 @@ export function AppSidebar() {
                               className="cursor-pointer px-2 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
                             >
                               <div className="flex gap-2">
-                                <img
-                                  src={
-                                    icons.find((v) => v.value === child.bookId)
-                                      ?.url ||
-                                    icons.find((v) => v.value === "placeholder")
-                                      ?.url
-                                  }
-                                  alt=""
-                                  className="h-6 aspect-square"
-                                />
+                                <DbIcon keyName={child.bookId} />
                                 <span className="font-bold tracking-wide">
                                   {child.bookId}
                                 </span>
@@ -212,6 +200,14 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem className="flex justify-between mx-3">
+            <Label htmlFor="airplane-mode">Reading Mode</Label>
+            <Switch
+              id="airplane-mode"
+              checked={isReadingMode}
+              onCheckedChange={setIsReadingMode}
+            />
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <div
               onClick={() => handleGoogleLogin()}
