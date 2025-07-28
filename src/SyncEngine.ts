@@ -17,6 +17,7 @@ type TableName = "Items" | "ClassorBook" | "Icons";
 const getTable = (name: TableName) => {
   return db[name]; // TS knows it's safe now
 };
+let LastSyncedFlag = true;
 
 async function DexieToFirestore() {
   const queue = await db.SyncedQueue.toArray();
@@ -46,6 +47,7 @@ async function DexieToFirestore() {
         success = true;
       }
     } catch (err) {
+      LastSyncedFlag = false;
       console.error("❌ Firestore sync failed", err);
     }
 
@@ -89,6 +91,7 @@ async function FirestoreToDexie() {
         }
       }
     } catch (error) {
+      LastSyncedFlag = false;
       console.error(error);
       toast.error("Error Occured of Items Fetched");
     }
@@ -112,6 +115,8 @@ async function FirestoreToDexie() {
         });
       }
     } catch (err) {
+      LastSyncedFlag = false;
+
       console.error(err);
       toast.error("Error Occured Fetched Deleted Items");
     }
@@ -136,6 +141,8 @@ async function FirestoreToDexie() {
         });
       }
     } catch (error) {
+      LastSyncedFlag = false;
+
       console.error(error);
       toast.error("Error occured classorbook fetched");
     }
@@ -160,6 +167,8 @@ async function FirestoreToDexie() {
         });
       }
     } catch (error) {
+      LastSyncedFlag = false;
+
       console.error(error);
       toast.error("Error Occured Icons Fetched");
     }
@@ -185,10 +194,13 @@ export async function allSync(setSyncLoading: (val: boolean) => void) {
   try {
     await DexieToFirestore();
     await FirestoreToDexie();
-    await db.SyncMeta.put({
-      key: "lastSyncedAt",
-      value: new Date().toISOString(),
-    });
+    if (LastSyncedFlag) {
+      await db.SyncMeta.put({
+        key: "lastSyncedAt",
+        value: new Date().toISOString(),
+      });
+    }
+
     setTimeout(() => {
       setSyncLoading(false);
       isSyncing = false;
