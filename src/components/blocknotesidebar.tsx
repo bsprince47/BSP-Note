@@ -175,6 +175,7 @@ export function BlockNoteSidebar() {
               editable={!isReadingMode}
               editor={editor}
               theme={"light"}
+              spellCheck={!isReadingMode}
             />
           )}
         </div>
