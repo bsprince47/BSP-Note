@@ -66,6 +66,7 @@ export function AppSidebar() {
       onclick: () => {
         setOpenCommandSearch(true);
       },
+      shortcutKey: "s",
     },
     {
       title: "Icons",
@@ -85,7 +86,6 @@ export function AppSidebar() {
       title: "Add Item",
       icon: FilePlus,
       onclick: () => {
-        console.log("a");
         setOpenSidebar(true);
         setPageTitle("");
         setPageGuess("");
@@ -94,6 +94,7 @@ export function AppSidebar() {
         );
         setPagePriority("low"), setNanoPageId(nanoid());
       },
+      shortcutKey: "a",
     },
   ];
 
@@ -107,6 +108,7 @@ export function AppSidebar() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser: any) => {
       setUser(currentUser);
+      allSync(setSyncLoading);
     });
     return () => unsub();
   }, []);
@@ -131,7 +133,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <div onClick={item.onclick}>
+                    <div onClick={item.onclick} data-key={item?.shortcutKey}>
                       {syncLoading && item.title === "Sync" ? (
                         <item.icon className="animate-spin" />
                       ) : (
@@ -201,7 +203,9 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem className="flex justify-between mx-3">
-            <Label htmlFor="airplane-mode">Reading Mode</Label>
+            <Label data-key="r" htmlFor="airplane-mode">
+              Reading Mode
+            </Label>
             <Switch
               id="airplane-mode"
               checked={isReadingMode}

@@ -195,6 +195,7 @@ export async function allSync(setSyncLoading: (val: boolean) => void) {
     await DexieToFirestore();
     await FirestoreToDexie();
     if (LastSyncedFlag) {
+      console.log("work");
       await db.SyncMeta.put({
         key: "lastSyncedAt",
         value: new Date().toISOString(),

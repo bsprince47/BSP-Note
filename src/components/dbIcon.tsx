@@ -4,9 +4,10 @@ import type { Icons } from "@/Dexie";
 
 type IconImgProps = {
   keyName: string; // ⛔ `key` is a reserved prop in React, so rename it
+  onClick?: any;
 };
 
-export function DbIcon({ keyName }: IconImgProps) {
+export function DbIcon({ keyName, onClick }: IconImgProps) {
   const [url, setUrl] = useState<string | null>(null); // use null to avoid empty string issues
 
   useEffect(() => {
@@ -34,5 +35,12 @@ export function DbIcon({ keyName }: IconImgProps) {
   // ✅ Only render <img> if url exists
   if (!url) return null;
 
-  return <img className="h-7 aspect-square" src={url} alt={keyName} />;
+  return (
+    <img
+      onClick={onClick}
+      className="h-7 aspect-square"
+      src={url}
+      alt={keyName}
+    />
+  );
 }

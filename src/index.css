@@ -123,10 +123,18 @@
   display: none !important;
 }
 
+.bn-container pre::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  .bn-container pre {
+  @apply overflow-x-auto whitespace-pre rounded-md p-2 max-w-[90VW] sm:max-w-[45vw];
+}
 
   body {
     @apply bg-background text-foreground;

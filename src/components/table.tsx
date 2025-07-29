@@ -45,6 +45,7 @@ export default function Table() {
     setPageClass,
     setPageBook,
     setNanoPageId,
+    setPagePriority,
     SyncedQueue,
     selectedFilter,
     renderRangeData,
@@ -78,6 +79,24 @@ export default function Table() {
                 }}
               >
                 Copy Id
+                {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setOpenSidebar(true);
+                  setNanoPageId(item.id);
+                  setPageTitle(item.title);
+                  setPageGuess(item.guess);
+                  setPagePriority(item.priority);
+                  setPageContent(
+                    item.content ??
+                      `[{type: "paragraph",content: [{type: "text",text: "",styles: {},},],},]`
+                  );
+                  setPageClass(item.classId);
+                  setPageBook(item.bookId);
+                }}
+              >
+                Open page
                 {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -118,27 +137,14 @@ export default function Table() {
       const item = row.original; // 👈 full row data
 
       return (
-        <div
-          onClick={(e) => {
-            e.currentTarget.firstElementChild?.classList.toggle("blur-sm");
-          }}
-          className="p-2 group font-bold relative cursor-pointer"
-        >
-          <span className="flex gap-1 blur-sm items-center">
+        <div className="p-2 group font-bold relative cursor-pointer">
+          <span className="flex gap-1 items-center">
             <DbIcon keyName={item.bookId} />
             <span
-              onClick={() => {
-                setOpenSidebar(true);
-                setNanoPageId(item.id);
-                setPageTitle(item.title);
-                setPageGuess(item.guess);
-                setPageContent(
-                  item.content ??
-                    `[{type: "paragraph",content: [{type: "text",text: "",styles: {},},],},]`
-                );
-                setPageClass(item.classId);
-                setPageBook(item.bookId);
+              onClick={(e) => {
+                e.currentTarget.classList.toggle("blur-sm");
               }}
+              className="blur-sm"
             >
               {item.title}
             </span>

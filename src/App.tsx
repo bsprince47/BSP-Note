@@ -13,10 +13,21 @@ function App() {
 
       allSync(setSyncLoading);
 
-      setInterval(() => {
-        allSync(setSyncLoading);
-      }, 30000);
+      // setInterval(() => {
+      //   allSync(setSyncLoading);
+      // }, 30000);
     })();
+    window.addEventListener("keydown", (e) => {
+      const key = e.key.toLowerCase();
+
+      if (e.ctrlKey && e.altKey) {
+        const el = document.querySelector(`[data-key="${key}"]`);
+        if (el instanceof HTMLElement) {
+          e.preventDefault(); // optional: block browser default
+          el.click();
+        }
+      }
+    });
   }, []);
 
   return (

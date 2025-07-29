@@ -18,6 +18,13 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
 import { BlockNoteEditor, type PartialBlock } from "@blocknote/core";
 import imageCompression from "browser-image-compression";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // interface EditorProps {
 //   onChange: (value: string) => void;
@@ -33,10 +40,12 @@ export function BlockNoteSidebar() {
     setPageTitle,
     pageGuess,
     setPageGuess,
-
+    setPageContent,
     pageClass,
     pageBook,
     pageContent,
+    pagePriority,
+    setPagePriority,
     nanoPageId,
     SyncedQueue,
     isReadingMode,
@@ -130,7 +139,7 @@ export function BlockNoteSidebar() {
   return (
     <Sheet open={openSidebar} onOpenChange={setOpenSidebar}>
       <DialogTitle className="hidden">Edit Page</DialogTitle>
-      <SheetContent className="w-full sm:max-w-1/2 overflow-auto">
+      <SheetContent className="w-full sm:max-w-1/2 overflow-y-auto overflow-x-hidden">
         <input
           inert={isReadingMode ? true : false}
           className="text-xl font-bold w-full bg-transparent focus:outline-none px-2"
@@ -147,7 +156,20 @@ export function BlockNoteSidebar() {
         />
         <ClassBookComboBox classorbook="class" />
         <ClassBookComboBox classorbook="book" />
-        <div className="grid flex-1 auto-rows-min gap-6 px-4">
+        <Select
+          value={pagePriority}
+          onValueChange={(value) => setPagePriority(value)}
+        >
+          <SelectTrigger className="w-auto mx-2">
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="low">low</SelectItem>
+            <SelectItem value="medium">medium</SelectItem>
+            <SelectItem value="high">high</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="grid flex-1 gap-6 px-4 w-full">
           {editor && (
             <BlockNoteView
               editable={!isReadingMode}
@@ -165,7 +187,7 @@ export function BlockNoteSidebar() {
                 ? JSON.stringify(editor.topLevelBlocks, null, 2)
                 : pageContent || ""; // fallback to last known content or empty string
 
-              // setPageContent(currentContent);
+              setPageContent(currentContent);
               try {
                 await db.Items.add({
                   id: nanoPageId,
@@ -176,7 +198,7 @@ export function BlockNoteSidebar() {
                   renderDate: new Date().getTime(),
                   classId: pageClass,
                   bookId: pageBook,
-                  priority: "low",
+                  priority: pagePriority,
                 });
                 await SyncedQueue(nanoPageId, "Items", "add");
                 toast.success("Success save id", {
@@ -193,7 +215,7 @@ export function BlockNoteSidebar() {
                     renderDate: new Date().getTime(),
                     classId: pageClass,
                     bookId: pageBook,
-                    priority: "low",
+                    priority: pagePriority,
                   });
                   await SyncedQueue(nanoPageId, "Items", "update");
 

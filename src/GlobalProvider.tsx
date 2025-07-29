@@ -120,10 +120,10 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
   // ],
 
   renderRangeData: {
-    0: { time: 6000, label: "1h" },
-    // 0: { time: 1 * 60 * 60 * 1000, label: "1h" },
-    1: { time: 6000, label: "3h" },
-    // 1: { time: 3 * 60 * 60 * 1000, label: "3h" },
+    // 0: { time: 6000, label: "1h" },
+    0: { time: 1 * 60 * 60 * 1000, label: "1h" },
+    // 1: { time: 6000, label: "3h" },
+    1: { time: 3 * 60 * 60 * 1000, label: "3h" },
     2: { time: 24 * 60 * 60 * 1000, label: "24h" },
     3: { time: 3 * 24 * 60 * 60 * 1000, label: "3d" },
     4: { time: 6 * 24 * 60 * 60 * 1000, label: "6d" },

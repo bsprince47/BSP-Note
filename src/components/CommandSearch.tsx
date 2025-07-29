@@ -21,6 +21,7 @@ export function CommandSearch() {
     setPageContent,
     setPageClass,
     setPageBook,
+    setPagePriority,
     // setPagePriority,
     setNanoPageId,
   } = useGlobalStore();
@@ -46,6 +47,8 @@ export function CommandSearch() {
 
       const data = await db.Items.filter(
         (item) =>
+          item.id.toLowerCase().includes(lower) ||
+          item.guess.toLowerCase().includes(lower) ||
           item.title.toLowerCase().includes(lower) ||
           item.content.toLowerCase().includes(lower) ||
           item.bookId.toLowerCase().includes(lower) ||
@@ -74,13 +77,14 @@ export function CommandSearch() {
             return (
               <CommandItem
                 key={note.id}
-                value={`${note.title} ${note.priority} ${note.bookId}`}
+                value={`${note.title} ${note.priority} ${note.bookId} ${note.id} ${note.guess}`}
                 onSelect={() => {
                   setOpenCommandSearch(false);
                   setOpenSidebar(true);
                   setNanoPageId(note.id);
                   setPageTitle(note.title);
                   setPageGuess(note.guess);
+                  setPagePriority(note.priority);
                   setPageContent(
                     note.content ??
                       `[{type: "paragraph",content: [{type: "text",text: "",styles: {},},],},]`
@@ -91,7 +95,9 @@ export function CommandSearch() {
                 className="flex flex-col items-start"
               >
                 <div className="font-medium w-full">{note.title}</div>
+                <span>{note.guess}</span>
                 <div className="text-xs text-muted-foreground flex justify-between gap-2 w-full">
+                  <span>{note.id}</span>
                   <span>{note.priority}</span>
                   <span>{note.classId}</span>
                   <span>{note.bookId}</span>
