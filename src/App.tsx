@@ -13,9 +13,9 @@ function App() {
 
       allSync(setSyncLoading);
 
-      // setInterval(() => {
-      //   allSync(setSyncLoading);
-      // }, 30000);
+      setInterval(() => {
+        allSync(setSyncLoading);
+      }, 60000);
     })();
     window.addEventListener("keydown", (e) => {
       const key = e.key.toLowerCase();

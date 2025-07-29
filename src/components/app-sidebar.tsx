@@ -48,6 +48,8 @@ export function AppSidebar() {
     setOpenIcon,
     isReadingMode,
     setIsReadingMode,
+    isRenderingMode,
+    setIsRenderingMode,
   } = useGlobalStore();
   const itemList = useLiveQuery(() => db.ClassorBook.toArray(), [], []);
 
@@ -203,11 +205,21 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem className="flex justify-between mx-3">
-            <Label data-key="r" htmlFor="airplane-mode">
+            <Label data-key="e" htmlFor="renderingmode">
+              Renders Mode
+            </Label>
+            <Switch
+              id="renderingmode"
+              checked={isRenderingMode}
+              onCheckedChange={setIsRenderingMode}
+            />
+          </SidebarMenuItem>
+          <SidebarMenuItem className="flex justify-between mx-3">
+            <Label data-key="r" htmlFor="readingmode">
               Reading Mode
             </Label>
             <Switch
-              id="airplane-mode"
+              id="readingmode"
               checked={isReadingMode}
               onCheckedChange={setIsReadingMode}
             />

@@ -11,6 +11,8 @@ type GlobalStore = {
 
   isReadingMode: boolean;
   setIsReadingMode: (val: boolean) => void;
+  isRenderingMode: boolean;
+  setIsRenderingMode: (val: boolean) => void;
 
   openIcon: boolean;
   setOpenIcon: (val: boolean) => void;
@@ -56,6 +58,8 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
 
   isReadingMode: true,
   setIsReadingMode: (val) => set({ isReadingMode: val }),
+  isRenderingMode: true,
+  setIsRenderingMode: (val) => set({ isRenderingMode: val }),
 
   openIcon: false,
   setOpenIcon: (val) => set({ openIcon: val }),
@@ -135,13 +139,21 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
 }));
 
 export function useFilteredPages(filter: string): PageItem[] {
+  const { isRenderingMode } = useGlobalStore();
   const data = useLiveQuery(() => {
     if (filter === "all")
       return db.Items.filter(
         (item) => item.renderDate <= new Date().getTime()
       ).toArray();
-    return db.Items.where("bookId").equals(filter).toArray(); // change field as needed
-  }, [filter]);
+    if (isRenderingMode) {
+      return db.Items.where("bookId")
+        .equals(filter)
+        .filter((item) => item.renderDate <= new Date().getTime())
+        .toArray(); // change field as needed
+    } else {
+      return db.Items.where("bookId").equals(filter).toArray(); // change field as needed
+    }
+  }, [filter, isRenderingMode]);
 
   return data ?? [];
 }
