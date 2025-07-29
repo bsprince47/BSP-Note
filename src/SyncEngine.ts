@@ -17,7 +17,7 @@ type TableName = "Items" | "ClassorBook" | "Icons";
 const getTable = (name: TableName) => {
   return db[name]; // TS knows it's safe now
 };
-let LastSyncedFlag = true;
+let LastSyncedFlag = false;
 
 async function DexieToFirestore() {
   const queue = await db.SyncedQueue.toArray();
@@ -34,7 +34,9 @@ async function DexieToFirestore() {
         if (localData) {
           await setDoc(ref, { ...localData, updatedAt: serverTimestamp() });
           success = true;
+          LastSyncedFlag = true;
         } else {
+          LastSyncedFlag = false;
           console.error("table id not defined");
         }
       } else if (item.type === "delete") {
@@ -44,6 +46,7 @@ async function DexieToFirestore() {
           table: item.table,
           updatedAt: serverTimestamp(),
         });
+        LastSyncedFlag = true;
         success = true;
       }
     } catch (err) {
@@ -89,6 +92,7 @@ async function FirestoreToDexie() {
             description: `${Items.docs.length + 1} Synced`,
           });
         }
+        LastSyncedFlag = true;
       }
     } catch (error) {
       LastSyncedFlag = false;
@@ -113,6 +117,7 @@ async function FirestoreToDexie() {
         toast.success("deletedItems", {
           description: `${deletedItems.docs.length + 1} Synced`,
         });
+        LastSyncedFlag = true;
       }
     } catch (err) {
       LastSyncedFlag = false;
@@ -139,6 +144,7 @@ async function FirestoreToDexie() {
         toast.success("classorbook", {
           description: `${classOrBook.docs.length + 1} Synced`,
         });
+        LastSyncedFlag = true;
       }
     } catch (error) {
       LastSyncedFlag = false;
@@ -165,6 +171,7 @@ async function FirestoreToDexie() {
         toast.success("Icons", {
           description: `${Icons.docs.length + 1} Synced`,
         });
+        LastSyncedFlag = true;
       }
     } catch (error) {
       LastSyncedFlag = false;
