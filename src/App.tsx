@@ -34,7 +34,7 @@ function App() {
     <>
       <Layout></Layout>
 
-      <Toaster position="top-right" expand={true} richColors />
+      <Toaster position="bottom-right" expand={false} richColors />
     </>
   );
 }

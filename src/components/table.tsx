@@ -49,6 +49,8 @@ export default function Table() {
     SyncedQueue,
     selectedFilter,
     renderRangeData,
+    isRenderingMode,
+    setIsRenderingMode,
   } = useGlobalStore();
   const data = useFilteredPages(selectedFilter); // ← this replaces pages
 
@@ -162,7 +164,9 @@ export default function Table() {
       return (
         <div className="p-2">
           <AlertDialog>
-            <AlertDialogTrigger className="w-full rounded-md text-sm font-medium  bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2">
+            <AlertDialogTrigger
+              className={`w-full rounded-md text-sm font-medium  bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2`}
+            >
               {renderRangeData[item.renderRange || 0].label}
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -176,26 +180,30 @@ export default function Table() {
               <AlertDialogFooter>
                 <AlertDialogCancel
                   onClick={async () => {
-                    try {
-                      const newRenderRange = 1;
+                    if (isRenderingMode) {
+                      try {
+                        const newRenderRange = 1;
 
-                      await db.Items.update(item.id, {
-                        ...item,
-                        renderRange: newRenderRange,
-                        renderDate:
-                          new Date().getTime() +
-                          renderRangeData[String(newRenderRange)].time,
-                      });
-                      await SyncedQueue(item.id, "Items", "update");
+                        await db.Items.update(item.id, {
+                          ...item,
+                          renderRange: newRenderRange,
+                          renderDate:
+                            new Date().getTime() +
+                            renderRangeData[String(newRenderRange)].time,
+                        });
+                        await SyncedQueue(item.id, "Items", "update");
 
-                      toast.success(
-                        "Page already present successfully updated",
-                        {
-                          description: item.id,
-                        }
-                      );
-                    } catch (e) {
-                      console.error("❌ Failed to update progress:", e);
+                        toast.success(
+                          "Page already present successfully updated",
+                          {
+                            description: item.id,
+                          }
+                        );
+                      } catch (e) {
+                        console.error("❌ Failed to update progress:", e);
+                      }
+                    } else {
+                      toast.error("Switch to render Mode For Render Feature");
                     }
                   }}
                 >
@@ -203,29 +211,33 @@ export default function Table() {
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    try {
-                      const newRenderRange = Math.min(
-                        (item?.renderRange ?? 0) + 1,
-                        9
-                      );
+                    if (isRenderingMode) {
+                      try {
+                        const newRenderRange = Math.min(
+                          (item?.renderRange ?? 0) + 1,
+                          9
+                        );
 
-                      await db.Items.update(item.id, {
-                        ...item,
-                        renderRange: newRenderRange,
-                        renderDate:
-                          new Date().getTime() +
-                          renderRangeData[String(newRenderRange)].time,
-                      });
-                      await SyncedQueue(item.id, "Items", "update");
+                        await db.Items.update(item.id, {
+                          ...item,
+                          renderRange: newRenderRange,
+                          renderDate:
+                            new Date().getTime() +
+                            renderRangeData[String(newRenderRange)].time,
+                        });
+                        await SyncedQueue(item.id, "Items", "update");
 
-                      toast.success(
-                        "Page already present successfully updated",
-                        {
-                          description: item.id,
-                        }
-                      );
-                    } catch (e) {
-                      console.error("❌ Failed to update progress:", e);
+                        toast.success(
+                          "Page already present successfully updated",
+                          {
+                            description: item.id,
+                          }
+                        );
+                      } catch (e) {
+                        console.error("❌ Failed to update progress:", e);
+                      }
+                    } else {
+                      toast.error("Switch to render Mode For Render Feature");
                     }
                   }}
                 >

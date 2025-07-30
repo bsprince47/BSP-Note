@@ -16,7 +16,13 @@ import { db } from "@/Dexie";
 // import { nanoid } from "nanoid";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
-import { BlockNoteEditor, type PartialBlock } from "@blocknote/core";
+import {
+  BlockNoteEditor,
+  BlockNoteSchema,
+  defaultBlockSpecs,
+  filterSuggestionItems,
+  type PartialBlock,
+} from "@blocknote/core";
 import imageCompression from "browser-image-compression";
 import {
   Select,
@@ -25,13 +31,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Arabic, insertArabic } from "./block-note/Arabic";
+import {
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
+} from "@blocknote/react";
+import { Urdu, insertUrdu } from "./block-note/Urdu";
 
-// interface EditorProps {
-//   onChange: (value: string) => void;
-//   initialContent?: string;
-//   editable?: boolean;
-// }
-// {onChange,initialContent, editable}: EditorProps
+export const schema = BlockNoteSchema.create({
+  blockSpecs: {
+    ...defaultBlockSpecs,
+    urdu: Urdu,
+    arabic: Arabic,
+  },
+});
+
 export function BlockNoteSidebar() {
   const {
     openSidebar,
@@ -50,30 +64,9 @@ export function BlockNoteSidebar() {
     SyncedQueue,
     isReadingMode,
   } = useGlobalStore();
-  // const editor = useCreateBlockNote({
-  //   initialContent:
-  //     pageContent && pageContent !== ""
-  //       ? JSON.parse(pageContent)
-  //       : [
-  //           {
-  //             type: "paragraph",
-  //             content: [],
-  //           },
-  //         ],
-  // });
 
-  const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
-  // const editor : BlockNoteEditor = useBlockNote({
-  //   editable,
-  //   initialContent: initialContent? JSON.parse(initialContent),
-  //   onEitorContentChange: (editor) => {
-  //     onChange(JSON.stringify(editor.topLevelBlocks,null,2))
-  //   }
-  // })
-
-  // const editor = useCreateBlockNote({
-  //   initialContent: fallbackContent,
-  // });
+  // const [editor, setEditor] = useState<BlockNoteEditor<typeof schema> | null>(null);
+  const [editor, setEditor] = useState<any>(null);
 
   const fallbackContent: PartialBlock[] = [
     {
@@ -88,7 +81,6 @@ export function BlockNoteSidebar() {
     },
   ];
 
-  // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
   async function uploadFile(file: File) {
     // const body = new FormData();
     // body.append("file", file);
@@ -126,6 +118,7 @@ export function BlockNoteSidebar() {
       }
 
       const newEditor = await BlockNoteEditor.create({
+        schema,
         initialContent: parsedContent,
         uploadFile,
       });
@@ -177,7 +170,29 @@ export function BlockNoteSidebar() {
               editor={editor}
               theme={"light"}
               spellCheck={!isReadingMode}
-            />
+              slashMenu={false}
+            >
+              <SuggestionMenuController
+                triggerCharacter={"/"}
+                getItems={async (query) => {
+                  // Gets all default slash menu items.
+                  const defaultItems = getDefaultReactSlashMenuItems(editor);
+                  // Finds index of last item in "Basic blocks" group.
+                  const lastBasicBlockIndex = defaultItems.findLastIndex(
+                    (item) => item.group === "basics"
+                  );
+                  // Inserts the Alert item as the last item in the "Basic blocks" group.
+                  defaultItems.splice(
+                    lastBasicBlockIndex + 1,
+                    0,
+                    insertUrdu(editor),
+                    insertArabic(editor)
+                  );
+                  // Returns filtered items based on the query.
+                  return filterSuggestionItems(defaultItems, query);
+                }}
+              />
+            </BlockNoteView>
           )}
         </div>
         <SheetFooter>
