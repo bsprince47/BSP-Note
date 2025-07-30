@@ -158,7 +158,7 @@ export function AppSidebar() {
                       onClick={() => toggleOpen(item)}
                       className="flex items-center justify-between cursor-pointer px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 items-center">
                         <DbIcon keyName={item} />
                         <span className="font-bold">{item}</span>
                       </div>
@@ -185,7 +185,7 @@ export function AppSidebar() {
                               }}
                               className="cursor-pointer px-2 py-1 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
                             >
-                              <div className="flex gap-2">
+                              <div className="flex gap-2 items-center">
                                 <DbIcon keyName={child.bookId} />
                                 <span className="font-bold tracking-wide">
                                   {child.bookId}

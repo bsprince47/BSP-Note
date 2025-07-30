@@ -157,6 +157,7 @@ export function BlockNoteSidebar() {
         <ClassBookComboBox classorbook="class" />
         <ClassBookComboBox classorbook="book" />
         <Select
+          disabled={isReadingMode ? true : false}
           value={pagePriority}
           onValueChange={(value) => setPagePriority(value)}
         >
