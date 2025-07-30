@@ -15,6 +15,8 @@ import { useGlobalStore } from "@/GlobalProvider";
 import { db } from "@/Dexie";
 // import { nanoid } from "nanoid";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { codeBlock } from "@blocknote/code-block";
+
 import { useEffect, useState } from "react";
 import {
   BlockNoteEditor,
@@ -118,6 +120,7 @@ export function BlockNoteSidebar() {
       }
 
       const newEditor = await BlockNoteEditor.create({
+        codeBlock,
         schema,
         initialContent: parsedContent,
         uploadFile,
