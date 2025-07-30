@@ -50,7 +50,6 @@ export default function Table() {
     selectedFilter,
     renderRangeData,
     isRenderingMode,
-    setIsRenderingMode,
   } = useGlobalStore();
   const data = useFilteredPages(selectedFilter); // ← this replaces pages
 
