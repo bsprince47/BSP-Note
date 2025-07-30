@@ -20,8 +20,8 @@ export default defineConfig({
         theme_color: "#0d9488",
         icons: [
           {
-            src: "vite.svg",
-            sizes: "192x192",
+            src: "https://img.icons8.com/3d-fluency/100/edit-property.png",
+            sizes: "100x100",
             type: "image/png",
           },
         ],
