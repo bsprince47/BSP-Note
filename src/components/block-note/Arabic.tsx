@@ -34,7 +34,7 @@ const ArabicBlockContent = createStronglyTypedTiptapNode({
 
   addKeyboardShortcuts() {
     return {
-      "ctrl-Alt-a": () => {
+      "ctrl-Alt-y": () => {
         const blockInfo = getBlockInfoFromSelection(this.editor.state);
         if (!blockInfo.isBlockContainer) return false;
 
