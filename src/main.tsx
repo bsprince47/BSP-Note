@@ -7,7 +7,7 @@ import { registerSW } from "virtual:pwa-register";
 const version = "1.0.0";
 registerSW({
   immediate: true,
-  onRegisteredSW(swUrl, reg) {
+  onRegisteredSW(_, reg) {
     if (!reg) return;
 
     reg.update(); // 🔁 Force SW to check for updates on page load
