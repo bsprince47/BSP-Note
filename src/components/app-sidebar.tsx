@@ -44,6 +44,7 @@ export function AppSidebar() {
     syncLoading,
     setSyncLoading,
     setOpenIcon,
+    setOpenQuiz,
   } = useGlobalStore();
   const itemList = useLiveQuery(() => db.ClassorBook.toArray(), [], []);
 
@@ -69,6 +70,13 @@ export function AppSidebar() {
       icon: Search,
       onclick: () => {
         setOpenIcon(true);
+      },
+    },
+    {
+      title: "Quiz",
+      icon: Search,
+      onclick: () => {
+        setOpenQuiz(true);
       },
     },
     {

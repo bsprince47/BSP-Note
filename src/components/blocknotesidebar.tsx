@@ -88,6 +88,7 @@ export function BlockNoteSidebar() {
     SyncedQueue,
     setIsReadingMode,
     isReadingMode,
+    setOpenQuiz,
   } = useGlobalStore();
 
   // const [editor, setEditor] = useState<BlockNoteEditor<typeof schema> | null>(null);
@@ -201,6 +202,9 @@ export function BlockNoteSidebar() {
               checked={isReadingMode}
               onCheckedChange={setIsReadingMode}
             />
+            <Button variant="outline" onClick={() => setOpenQuiz(true)}>
+              Quiz
+            </Button>
           </div>
         </div>
         <div className="grid flex-1 gap-6 px-4 w-full">

@@ -8,6 +8,8 @@ type GlobalStore = {
 
   openCommandSearch: boolean;
   setOpenCommandSearch: (val: boolean) => void;
+  openQuiz: boolean;
+  setOpenQuiz: (val: boolean) => void;
 
   isReadingMode: boolean;
   setIsReadingMode: (val: boolean) => void;
@@ -55,6 +57,8 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
 
   openCommandSearch: false,
   setOpenCommandSearch: (val) => set({ openCommandSearch: val }),
+  openQuiz: false,
+  setOpenQuiz: (val) => set({ openQuiz: val }),
 
   isReadingMode: true,
   setIsReadingMode: (val) => set({ isReadingMode: val }),

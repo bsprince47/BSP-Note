@@ -7,6 +7,7 @@ import { Icons } from "@/components/Icons";
 import { Label } from "./components/ui/label";
 import { Switch } from "./components/ui/switch";
 import { useGlobalStore } from "./GlobalProvider";
+import { Quiz } from "./components/Quiz";
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const { isRenderingMode, setIsRenderingMode } = useGlobalStore();
@@ -35,6 +36,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       <CommandSearch />
       <Icons />
       <GlobalAlertDialog />
+      <Quiz />
     </SidebarProvider>
   );
 }
