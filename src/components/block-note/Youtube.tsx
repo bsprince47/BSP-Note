@@ -49,7 +49,7 @@ export const youtubeRender = (
   iframe.className = "bn-visual-media";
   iframe.width = block.props.previewWidth.toString();
   iframe.height = "315";
-  iframe.src = block.props.url;
+  iframe.src = convertToEmbedUrl(block.props.url);
   iframe.allow =
     "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
   iframe.allowFullscreen = true;
@@ -87,7 +87,6 @@ export const parseYouTubeElement = (
 
   return {
     url: `https://www.youtube.com/embed/${videoId}`,
-    previewWidth: 560,
   };
 };
 
@@ -95,6 +94,14 @@ export const YouTubeBlock = createBlockSpec(youtubeBlockConfig, {
   render: youtubeRender,
   parse: parseYouTubeElement,
 });
+
+function convertToEmbedUrl(url: string) {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  if (!match) return "";
+  return `https://www.youtube.com/embed/${match[1]}`;
+}
 
 export const insertYouTube = (editor: typeof schema.BlockNoteEditor) => ({
   title: "YouTube",

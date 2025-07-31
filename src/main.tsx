@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { registerSW } from "virtual:pwa-register";
 
-const version = "1.0.1";
+const version = "1.0.2";
 registerSW({
   immediate: true,
   onRegisteredSW(_, reg) {
