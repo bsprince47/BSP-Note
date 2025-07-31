@@ -4,6 +4,11 @@ import { getBlockInfoFromSelection } from "@blocknote/core";
 import { createBlockSpecFromStronglyTypedTiptapNode } from "@blocknote/core";
 import { insertOrUpdateBlock } from "@blocknote/core";
 import { schema } from "../blocknotesidebar";
+import {
+  createReactStyleSpec,
+  useBlockNoteEditor,
+  useComponentsContext,
+} from "@blocknote/react";
 
 const UrduBlockContent = createStronglyTypedTiptapNode({
   name: "urdu",
@@ -65,3 +70,97 @@ export const insertUrdu = (editor: typeof schema.BlockNoteEditor) => ({
   group: "blockContent",
   badge: "Ctrl + Alt + u",
 });
+
+// inline button for font change
+// Custom Formatting Toolbar Button to toggle blue text & background color.
+
+export const Font = createReactStyleSpec(
+  {
+    type: "font",
+    propSchema: "string",
+  },
+  {
+    render: (props) => (
+      <span style={{ fontFamily: props.value }} ref={props.contentRef} />
+    ),
+  }
+);
+
+// export const  BlueButton = (editor: typeof schema.styleSchema) => () {
+//   const editor = useBlockNoteEditor();
+//   const Components = useComponentsContext()!;
+//   // Tracks whether the text & background are both blue.
+//   const [isSelected, setIsSelected] = useState<boolean>();
+//   // Updates state on content or selection change.
+//   useEditorContentOrSelectionChange(() => {
+//     setIsSelected(
+//       editor.addStyles({
+//           font: "fontName",
+//         });
+//     );
+//   }, editor);
+//   return (
+//     <Components.FormattingToolbar.Button
+//       mainTooltip={"Blue Text & Background"}
+//       onClick={() => {
+//         editor.toggleStyles({
+//           textColor: "blue",
+//           backgroundColor: "blue",
+//         });
+//       }}
+//       isSelected={isSelected}
+//     >
+//       Blue
+//     </Components.FormattingToolbar.Button>
+//   );
+// }
+export const BlueButton = () => {
+  const editor = useBlockNoteEditor<
+    typeof schema.blockSchema,
+    typeof schema.inlineContentSchema,
+    typeof schema.styleSchema
+  >();
+  const Components = useComponentsContext()!;
+  // Use optional chaining and type narrowing
+  const selection = editor.getSelection();
+  const firstBlock = Array.isArray(selection) ? selection[0] : undefined;
+  const currentFont =
+    firstBlock?.styles?.font ??
+    "Inter, SF Pro Display, -apple-system, sans serif";
+
+  return (
+    <Components.FormattingToolbar.Select
+      items={[
+        {
+          text: "English",
+          icon: null,
+          onClick: () => editor.addStyles({ font: "urdu" }),
+          isSelected:
+            currentFont === "Inter, SF Pro Display, -apple-system, sans serif",
+        },
+        {
+          text: "Urdu",
+          icon: null,
+          onClick: () => editor.addStyles({ font: "urdu" }),
+          isSelected: currentFont === "urdu",
+        },
+        {
+          text: "Arabic",
+          icon: null,
+          onClick: () => editor.addStyles({ font: "arabic" }),
+          isSelected: currentFont === "arabic",
+        },
+      ]}
+    />
+    // <Components.FormattingToolbar.Button
+    //   label="Set Font"
+    //   mainTooltip={"Set Font"}
+    //   icon={<ReceiptText />}
+    //   onClick={() => {
+    //     editor.addStyles({
+    //       font: "urdu",
+    //     });
+    //   }}
+    // />
+  );
+};

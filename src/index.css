@@ -165,31 +165,31 @@
 
 
 @font-face {
-  font-family: 'Gulzar';
+  font-family: 'urdu';
   src: url('../public/Fonts/Gulzar-Regular.ttf') format('truetype');
 }
 .urdu {
-  font-family: 'Jameel','Gulzar', serif !important;
+  font-family: 'urdu', serif !important;
     line-height: 2.2;
     font-size: 18px;
 
   * {
-    font-family: 'Jameel', 'Gulzar', serif !important;
+    font-family: 'urdu', serif !important;
     line-height: 2.2;
   }
 }
 @font-face {
-  font-family: 'Noorehuda';
+  font-family: 'arabic';
   src: url('../public/Fonts/noorehuda.ttf') format('truetype');
 }
 
 .arabic {
-  font-family: 'Noorehuda' !important;
+  font-family: 'arabic' !important;
   font-size: 24px;
     /* line-height: 3; */
 
   * {
-    font-family: 'Noorehuda' !important;
+    font-family: 'arabic' !important;
     /* line-height: 3; */
     font-size: 28px !important
     ;

@@ -22,6 +22,7 @@ import {
   BlockNoteEditor,
   BlockNoteSchema,
   defaultBlockSpecs,
+  defaultStyleSpecs,
   filterSuggestionItems,
   type PartialBlock,
 } from "@blocknote/core";
@@ -35,16 +36,33 @@ import {
 } from "@/components/ui/select";
 import { Arabic, insertArabic } from "./block-note/Arabic";
 import {
+  BasicTextStyleButton,
+  BlockTypeSelect,
+  ColorStyleButton,
+  CreateLinkButton,
+  FileCaptionButton,
+  FileReplaceButton,
+  FormattingToolbar,
+  FormattingToolbarController,
   getDefaultReactSlashMenuItems,
+  NestBlockButton,
   SuggestionMenuController,
+  TextAlignButton,
+  UnnestBlockButton,
 } from "@blocknote/react";
-import { Urdu, insertUrdu } from "./block-note/Urdu";
+import { Urdu, insertUrdu, Font, BlueButton } from "./block-note/Urdu";
 
 export const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     urdu: Urdu,
     arabic: Arabic,
+  },
+  styleSpecs: {
+    // Adds all default styles.
+    ...defaultStyleSpecs,
+    // Adds the Font style.
+    font: Font,
   },
 });
 
@@ -175,6 +193,54 @@ export function BlockNoteSidebar() {
               spellCheck={!isReadingMode}
               slashMenu={false}
             >
+              <FormattingToolbarController
+                formattingToolbar={() => (
+                  <FormattingToolbar>
+                    <BlockTypeSelect key={"blockTypeSelect"} />
+                    {/* Extra button to toggle blue text & background */}
+                    <BlueButton key={"customButton"} />
+                    <FileCaptionButton key={"fileCaptionButton"} />
+                    <FileReplaceButton key={"replaceFileButton"} />
+                    <BasicTextStyleButton
+                      basicTextStyle={"bold"}
+                      key={"boldStyleButton"}
+                    />
+                    <BasicTextStyleButton
+                      basicTextStyle={"italic"}
+                      key={"italicStyleButton"}
+                    />
+                    <BasicTextStyleButton
+                      basicTextStyle={"underline"}
+                      key={"underlineStyleButton"}
+                    />
+                    <BasicTextStyleButton
+                      basicTextStyle={"strike"}
+                      key={"strikeStyleButton"}
+                    />
+                    {/* Extra button to toggle code styles */}
+                    <BasicTextStyleButton
+                      key={"codeStyleButton"}
+                      basicTextStyle={"code"}
+                    />
+                    <TextAlignButton
+                      textAlignment={"left"}
+                      key={"textAlignLeftButton"}
+                    />
+                    <TextAlignButton
+                      textAlignment={"center"}
+                      key={"textAlignCenterButton"}
+                    />
+                    <TextAlignButton
+                      textAlignment={"right"}
+                      key={"textAlignRightButton"}
+                    />
+                    <ColorStyleButton key={"colorStyleButton"} />
+                    <NestBlockButton key={"nestBlockButton"} />
+                    <UnnestBlockButton key={"unnestBlockButton"} />
+                    <CreateLinkButton key={"createLinkButton"} />
+                  </FormattingToolbar>
+                )}
+              />
               <SuggestionMenuController
                 triggerCharacter={"/"}
                 getItems={async (query) => {
