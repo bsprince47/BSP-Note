@@ -139,14 +139,14 @@ export default function Table() {
 
       return (
         <div className="p-2 group font-bold relative cursor-pointer">
-          <span className="flex gap-1 items-center">
+          <span
+            className="flex gap-1 items-center"
+            onClick={(e) => {
+              e.currentTarget.children[1].classList.toggle("blur-sm");
+            }}
+          >
             <DbIcon keyName={item.bookId} />
-            <span
-              onClick={(e) => {
-                e.currentTarget.classList.toggle("blur-sm");
-              }}
-              className="blur-sm"
-            >
+            <span className={`${isRenderingMode ? "blur-sm" : null}`}>
               {item.title}
             </span>
           </span>
@@ -314,7 +314,7 @@ export default function Table() {
       classBodyTemplate("bookId"),
       priorityBodyTemplate(),
     ],
-    []
+    [isRenderingMode]
   );
 
   const table = useReactTable({

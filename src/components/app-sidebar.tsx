@@ -204,26 +204,6 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem className="flex justify-between mx-3">
-            <Label data-key="e" htmlFor="renderingmode">
-              Renders Mode
-            </Label>
-            <Switch
-              id="renderingmode"
-              checked={isRenderingMode}
-              onCheckedChange={setIsRenderingMode}
-            />
-          </SidebarMenuItem>
-          <SidebarMenuItem className="flex justify-between mx-3">
-            <Label data-key="r" htmlFor="readingmode">
-              Reading Mode
-            </Label>
-            <Switch
-              id="readingmode"
-              checked={isReadingMode}
-              onCheckedChange={setIsReadingMode}
-            />
-          </SidebarMenuItem>
           <SidebarMenuItem>
             <div
               onClick={() => handleGoogleLogin()}

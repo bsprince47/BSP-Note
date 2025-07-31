@@ -51,6 +51,8 @@ import {
   UnnestBlockButton,
 } from "@blocknote/react";
 import { Urdu, insertUrdu, Font, BlueButton } from "./block-note/Urdu";
+import { Label } from "./ui/label";
+import { Switch } from "./ui/switch";
 
 export const schema = BlockNoteSchema.create({
   blockSpecs: {
@@ -82,6 +84,7 @@ export function BlockNoteSidebar() {
     setPagePriority,
     nanoPageId,
     SyncedQueue,
+    setIsReadingMode,
     isReadingMode,
   } = useGlobalStore();
 
@@ -168,22 +171,36 @@ export function BlockNoteSidebar() {
           placeholder="Page Guess"
           onChange={(e) => setPageGuess(e.target.value)}
         />
-        <ClassBookComboBox classorbook="class" />
-        <ClassBookComboBox classorbook="book" />
-        <Select
-          disabled={isReadingMode ? true : false}
-          value={pagePriority}
-          onValueChange={(value) => setPagePriority(value)}
-        >
-          <SelectTrigger className="w-auto mx-2">
-            <SelectValue placeholder="Select a fruit" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="low">low</SelectItem>
-            <SelectItem value="medium">medium</SelectItem>
-            <SelectItem value="high">high</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="grid grid-cols-2">
+          <ClassBookComboBox classorbook="class" />
+          <ClassBookComboBox classorbook="book" />
+        </div>
+        <div className="grid grid-cols-2">
+          <Select
+            disabled={isReadingMode ? true : false}
+            value={pagePriority}
+            onValueChange={(value) => setPagePriority(value)}
+          >
+            <SelectTrigger className="w-auto mx-2">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="low">low</SelectItem>
+              <SelectItem value="medium">medium</SelectItem>
+              <SelectItem value="high">high</SelectItem>
+            </SelectContent>
+          </Select>
+          <div className="border border-slate-400/30 mx-2 rounded-md px-2 justify-between flex items-center">
+            <Label data-key="r" htmlFor="readingmode">
+              Reading Mode
+            </Label>
+            <Switch
+              id="readingmode"
+              checked={isReadingMode}
+              onCheckedChange={setIsReadingMode}
+            />
+          </div>
+        </div>
         <div className="grid flex-1 gap-6 px-4 w-full">
           {editor && (
             <BlockNoteView
