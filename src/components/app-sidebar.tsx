@@ -8,8 +8,6 @@ import {
   Database,
   Loader2,
 } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 
 import {
   Sidebar,
@@ -46,10 +44,6 @@ export function AppSidebar() {
     syncLoading,
     setSyncLoading,
     setOpenIcon,
-    isReadingMode,
-    setIsReadingMode,
-    isRenderingMode,
-    setIsRenderingMode,
   } = useGlobalStore();
   const itemList = useLiveQuery(() => db.ClassorBook.toArray(), [], []);
 

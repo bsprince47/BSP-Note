@@ -9,12 +9,7 @@ import { Switch } from "./components/ui/switch";
 import { useGlobalStore } from "./GlobalProvider";
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
-  const {
-    isRenderingMode,
-    setIsReadingMode,
-    setIsRenderingMode,
-    isReadingMode,
-  } = useGlobalStore();
+  const { isRenderingMode, setIsRenderingMode } = useGlobalStore();
   return (
     <SidebarProvider>
       <AppSidebar />
