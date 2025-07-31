@@ -51,6 +51,7 @@ import {
   UnnestBlockButton,
 } from "@blocknote/react";
 import { Urdu, insertUrdu, Font, BlueButton } from "./block-note/Urdu";
+import { YouTubeBlock, insertYouTube } from "./block-note/Youtube";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 
@@ -59,6 +60,7 @@ export const schema = BlockNoteSchema.create({
     ...defaultBlockSpecs,
     urdu: Urdu,
     arabic: Arabic,
+    youtube: YouTubeBlock,
   },
   styleSpecs: {
     // Adds all default styles.
@@ -272,7 +274,8 @@ export function BlockNoteSidebar() {
                     lastBasicBlockIndex + 1,
                     0,
                     insertUrdu(editor),
-                    insertArabic(editor)
+                    insertArabic(editor),
+                    insertYouTube(editor)
                   );
                   // Returns filtered items based on the query.
                   return filterSuggestionItems(defaultItems, query);
