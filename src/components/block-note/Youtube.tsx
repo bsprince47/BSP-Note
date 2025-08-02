@@ -46,9 +46,7 @@ export const youtubeRender = (
   wrapper.className = "bn-visual-media-wrapper";
 
   const iframe = document.createElement("iframe");
-  iframe.className = "bn-visual-media";
-  iframe.width = block.props.previewWidth.toString();
-  iframe.height = "315";
+  iframe.className = "bn-visual-media youtube-embed";
   iframe.src = convertToEmbedUrl(block.props.url);
   iframe.allow =
     "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
