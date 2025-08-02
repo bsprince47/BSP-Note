@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-table";
 import { GripVertical } from "lucide-react";
 import { BlockNoteSidebar } from "./blocknotesidebar";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useFilteredPages, useGlobalStore } from "@/GlobalProvider";
 import {
@@ -33,6 +33,13 @@ import { db } from "@/Dexie";
 import type { PageItem } from "@/Dexie";
 import { useDialogStore } from "@/stores/alert-dialog-store";
 import { DbIcon } from "./dbIcon";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "./ui/pagination";
 // import { Fdb } from "@/firebase";
 // import { doc } from "firebase/firestore";
 
@@ -51,7 +58,10 @@ export default function Table() {
     renderRangeData,
     isRenderingMode,
   } = useGlobalStore();
-  const data = useFilteredPages(selectedFilter); // ← this replaces pages
+  const [pageIndex, setPageIndex] = useState(0);
+  const data = useFilteredPages(selectedFilter, pageIndex); // ← this replaces pages
+
+  //pagination
 
   // field: keyof User
   const idBodyTemplate = () => ({
@@ -366,6 +376,30 @@ export default function Table() {
           ))}
         </tbody>
       </table>
+      <Pagination>
+        <PaginationContent className="w-full flex justify-between items-center">
+          {/* Prev */}
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={() => {
+                if (pageIndex > 0) setPageIndex((prev) => prev - 1);
+              }}
+            />
+          </PaginationItem>
+
+          {/* Next */}
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={() => {
+                if (data.length === 30) setPageIndex((prev) => prev + 1);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+
       <BlockNoteSidebar />
     </div>
   );

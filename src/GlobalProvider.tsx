@@ -142,22 +142,34 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
   },
 }));
 
-export function useFilteredPages(filter: string): PageItem[] {
+export function useFilteredPages(
+  filter: string,
+  pageIndex?: number
+): PageItem[] {
+  const offset = pageIndex ? pageIndex * 30 : 0; // Adjust offset based on pageIndex
+
   const { isRenderingMode } = useGlobalStore();
   const data = useLiveQuery(() => {
     if (filter === "all")
-      return db.Items.filter(
-        (item) => item.renderDate <= new Date().getTime()
-      ).toArray();
+      return db.Items.filter((item) => item.renderDate <= new Date().getTime())
+        .offset(offset)
+        .limit(30)
+        .toArray();
     if (isRenderingMode) {
       return db.Items.where("bookId")
         .equals(filter)
         .filter((item) => item.renderDate <= new Date().getTime())
+        .offset(offset)
+        .limit(30)
         .toArray(); // change field as needed
     } else {
-      return db.Items.where("bookId").equals(filter).toArray(); // change field as needed
+      return db.Items.where("bookId")
+        .equals(filter)
+        .offset(offset)
+        .limit(30)
+        .toArray(); // change field as needed
     }
-  }, [filter, isRenderingMode]);
+  }, [filter, isRenderingMode, pageIndex]);
 
   return data ?? [];
 }
