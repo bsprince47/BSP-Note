@@ -62,9 +62,11 @@ export function Quiz() {
   useEffect(() => {
     if (!openQuiz) return;
 
+    const prom = prompt("first instructures of content");
+
     const loadQuiz = async () => {
       try {
-        const result = await model.generateContent(pageContent);
+        const result = await model.generateContent(prom + " " + pageContent);
         const text = result.response.text();
         const clean = text.replace(/```json|```/g, "").trim();
         const parsed = JSON.parse(clean);

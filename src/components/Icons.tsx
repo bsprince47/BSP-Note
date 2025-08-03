@@ -21,7 +21,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Edit2 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { db } from "@/Dexie";
@@ -90,17 +90,41 @@ export function Icons() {
                           setOpen(false);
                         }}
                       >
-                        <div className="flex gap-2 items-center">
-                          <img
-                            src={
-                              iconDbArray.find((v) => v.value === item.value)
-                                ?.url ||
-                              iconDbArray.find((v) => v.value === "placeholder")
-                                ?.url
-                            }
-                            className="h-6 aspect-square"
-                          />
-                          <span>{item.value}</span>
+                        <div className="flex gap-2 items-center w-full justify-between">
+                          <div className="flex gap-2 items-center">
+                            <img
+                              src={
+                                iconDbArray.find((v) => v.value === item.value)
+                                  ?.url ||
+                                iconDbArray.find(
+                                  (v) => v.value === "placeholder"
+                                )?.url
+                              }
+                              className="h-6 aspect-square"
+                            />
+                            <span>{item.value}</span>
+                          </div>
+                          <span
+                            className="justify-self-end"
+                            onClick={async () => {
+                              // iconDbArray.find((v) => v.value === item.value)
+                              const iconName = prompt("Enter icon name:");
+                              const iconURL = prompt("Enter icon URL:");
+                              if (!iconName) return;
+                              if (!iconURL) return;
+                              setIcon(iconName);
+                              const item = {
+                                value: iconName,
+                                url: iconURL,
+                              };
+                              await db.Icons.delete(item.value);
+                              await db.Icons.put(item);
+                              await SyncedQueue(item.value, "Icons", "delete");
+                              await SyncedQueue(iconName, "Icons", "add");
+                            }}
+                          >
+                            <Edit2 />
+                          </span>
                         </div>
 
                         <Check
