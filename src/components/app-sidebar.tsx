@@ -7,6 +7,7 @@ import {
   User2,
   Database,
   Loader2,
+  FolderEdit,
 } from "lucide-react";
 
 import {
@@ -44,7 +45,6 @@ export function AppSidebar() {
     syncLoading,
     setSyncLoading,
     setOpenIcon,
-    setOpenQuiz,
   } = useGlobalStore();
   const itemList = useLiveQuery(() => db.ClassorBook.toArray(), [], []);
 
@@ -67,18 +67,12 @@ export function AppSidebar() {
     },
     {
       title: "Icons",
-      icon: Search,
+      icon: FolderEdit,
       onclick: () => {
         setOpenIcon(true);
       },
     },
-    {
-      title: "Quiz",
-      icon: Search,
-      onclick: () => {
-        setOpenQuiz(true);
-      },
-    },
+
     {
       title: "All Items",
       icon: PackageOpen,

@@ -111,7 +111,7 @@ export const insertYouTube = (editor: typeof schema.BlockNoteEditor) => ({
       props: {
         url: "",
         caption: "",
-        previewWidth: 560,
+        previewWidth: 320,
         name: "",
         showPreview: true,
         textAlignment: "left",

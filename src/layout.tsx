@@ -17,7 +17,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       <main className="flex flex-col h-screen w-full overflow-hidden">
         <div className="flex gap-2 justify-between">
           <SidebarTrigger />
-          <div className="flex gap-2">
+          <div className="flex gap-2 mr-2">
             <div className="flex items-center gap-2">
               <Label data-key="e" htmlFor="renderingmode">
                 Renders Mode
