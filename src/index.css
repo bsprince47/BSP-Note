@@ -169,7 +169,7 @@
 
 @font-face {
   font-family: 'urdu';
-  src: url('../public/Fonts/Gulzar-Regular.ttf') format('truetype');
+  src: url('@/Fonts/Gulzar-Regular.ttf') format('truetype');
 }
 .urdu {
   font-family: 'urdu', serif !important;
@@ -183,7 +183,7 @@
 }
 @font-face {
   font-family: 'arabic';
-  src: url('../public/Fonts/noorehuda.ttf') format('truetype');
+  src: url('@/Fonts/noorehuda.ttf') format('truetype');
 }
 
 .arabic {
