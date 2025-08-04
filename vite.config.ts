@@ -12,7 +12,6 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["**/*"],
-
       manifest: {
         name: "My Offline React App",
         short_name: "ReactApp",
@@ -31,7 +30,7 @@ export default defineConfig({
       workbox: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 🔥 5MB limit
         globPatterns: [
-          "**/*.{js,css,html,woff2,woff,png,svg,jpg,jpeg,ico,json}",
+          "**/*.{js,css,html,woff2,woff,ttf,png,svg,jpg,jpeg,ico,json}",
         ],
       },
     }),
