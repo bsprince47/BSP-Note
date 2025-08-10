@@ -59,9 +59,15 @@ export default function Table() {
     isRenderingMode,
   } = useGlobalStore();
   const [pageIndex, setPageIndex] = useState(0);
-  const data = useFilteredPages(selectedFilter, pageIndex); // ← this replaces pages
+  const fulldata = useFilteredPages(selectedFilter, pageIndex);
 
-  //pagination
+  const priorityOrder = { high: 1, medium: 2, low: 3 };
+  const data = fulldata.sort((a, b) => {
+    return (
+      (priorityOrder[a.priority as keyof typeof priorityOrder] || 99) -
+      (priorityOrder[b.priority as keyof typeof priorityOrder] || 99)
+    );
+  });
 
   // field: keyof User
   const idBodyTemplate = () => ({
