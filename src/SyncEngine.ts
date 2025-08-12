@@ -22,8 +22,8 @@ let LastSyncedFlag = false;
 async function DexieToFirestore() {
   const queue = await db.SyncedQueue.toArray();
 
+  let success = false;
   for (const item of queue) {
-    let success = false;
     try {
       const ref = doc(Fdb, item.table, item.id);
 
@@ -37,7 +37,10 @@ async function DexieToFirestore() {
           LastSyncedFlag = true;
         } else {
           LastSyncedFlag = false;
-          console.error("table id not defined");
+          toast.success("table id not defined", {
+            duration: Infinity,
+            description: "error to push doc in firestore",
+          });
         }
       } else if (item.type === "delete") {
         await deleteDoc(ref);
@@ -51,14 +54,19 @@ async function DexieToFirestore() {
       }
     } catch (err) {
       LastSyncedFlag = false;
-      console.error("❌ Firestore sync failed", err);
+      toast.error("error occured during dexie to firestore sync", {
+        description: err as any,
+        duration: Infinity,
+      });
     }
 
     if (success) {
       // ✅ Remove after syncing
       await db.SyncedQueue.delete(item.id);
-      toast.success("synced to db");
     }
+  }
+  if (success) {
+    toast.success("synced to db");
   }
 }
 
@@ -73,6 +81,7 @@ async function FirestoreToDexie() {
         collection(Fdb, "Items"),
         where("updatedAt", ">", Timestamp.fromDate(new Date(lastSyncedAt)))
       );
+      let success = false;
       const Items = await getDocs(Itemss);
       if (Items.docs.length !== 0) {
         for (const item of Items.docs) {
@@ -88,6 +97,9 @@ async function FirestoreToDexie() {
             bookId: data.bookId || "",
             priority: data.priority || "low",
           });
+          success = true;
+        }
+        if (success) {
           toast.success("Items", {
             description: `${Items.docs.length + 1} Synced`,
           });
@@ -105,6 +117,7 @@ async function FirestoreToDexie() {
         collection(Fdb, "DeletedItems"),
         where("updatedAt", ">", Timestamp.fromDate(new Date(lastSyncedAt)))
       );
+      let success = false;
 
       const deletedItems = await getDocs(deletedItemss);
       if (deletedItems.docs.length !== 0) {
@@ -113,15 +126,17 @@ async function FirestoreToDexie() {
           const table = getTable(data.table as TableName);
 
           await table.delete(data.id);
+          success = true;
         }
-        toast.success("deletedItems", {
-          description: `${deletedItems.docs.length + 1} Synced`,
-        });
+        if (success) {
+          toast.success("deletedItems", {
+            description: `${deletedItems.docs.length + 1} Synced`,
+          });
+        }
         LastSyncedFlag = true;
       }
     } catch (err) {
       LastSyncedFlag = false;
-
       console.error(err);
       toast.error("Error Occured Fetched Deleted Items");
     }
@@ -131,6 +146,7 @@ async function FirestoreToDexie() {
         collection(Fdb, "ClassorBook"),
         where("updatedAt", ">", Timestamp.fromDate(new Date(lastSyncedAt)))
       );
+      let success = false;
       const classOrBook = await getDocs(classOrBooks);
       if (classOrBook.docs.length !== 0) {
         for (const item of classOrBook.docs) {
@@ -140,15 +156,17 @@ async function FirestoreToDexie() {
             classId: data.classId,
             bookId: data.bookId,
           });
+          success = true;
         }
-        toast.success("classorbook", {
-          description: `${classOrBook.docs.length + 1} Synced`,
-        });
+        if (success) {
+          toast.success("classorbook", {
+            description: `${classOrBook.docs.length + 1} Synced`,
+          });
+        }
         LastSyncedFlag = true;
       }
     } catch (error) {
       LastSyncedFlag = false;
-
       console.error(error);
       toast.error("Error occured classorbook fetched");
     }
@@ -158,7 +176,7 @@ async function FirestoreToDexie() {
         collection(Fdb, "Icons"),
         where("updatedAt", ">", Timestamp.fromDate(new Date(lastSyncedAt)))
       );
-
+      let success = false;
       const Icons = await getDocs(Iconss);
       if (Icons.docs.length !== 0) {
         for (const item of Icons.docs) {
@@ -167,15 +185,17 @@ async function FirestoreToDexie() {
             value: data.value,
             url: data.url,
           });
+          success = true;
         }
-        toast.success("Icons", {
-          description: `${Icons.docs.length + 1} Synced`,
-        });
+        if (success) {
+          toast.success("Icons", {
+            description: `${Icons.docs.length + 1} Synced`,
+          });
+        }
         LastSyncedFlag = true;
       }
     } catch (error) {
       LastSyncedFlag = false;
-
       console.error(error);
       toast.error("Error Occured Icons Fetched");
     }
