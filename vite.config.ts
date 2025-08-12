@@ -6,6 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/BSP-Note/",
   plugins: [
     react(),
     tailwindcss(),
@@ -15,7 +16,7 @@ export default defineConfig({
       manifest: {
         name: "My Offline React App",
         short_name: "ReactApp",
-        start_url: "/",
+        start_url: "/BSP-Note/",
         display: "standalone",
         background_color: "#ffffff",
         theme_color: "#0d9488",
