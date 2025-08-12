@@ -125,7 +125,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>BSP Note</SidebarGroupLabel>
+          <SidebarGroupLabel>BSP Note 1.0.8</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
