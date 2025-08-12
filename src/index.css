@@ -135,6 +135,9 @@
   .bn-container pre {
   @apply overflow-x-auto whitespace-pre rounded-md p-2 max-w-[80VW] sm:max-w-[40vw];
 }
+.tableWrapper {
+  @apply max-w-[80VW] sm:max-w-[40vw];
+}
   .youtube-embed {
   @apply max-w-[90VW] sm:max-w-[50vw] aspect-video;
 }
