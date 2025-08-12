@@ -311,8 +311,9 @@ export function BlockNoteSidebar() {
                   priority: pagePriority,
                 });
                 await SyncedQueue(nanoPageId, "Items", "add");
-                toast.success("Success save id", {
+                toast.success("add", {
                   description: nanoPageId,
+                  duration: 100,
                 });
               } catch (error) {
                 const err = error as { name: string; message: string };
@@ -329,12 +330,14 @@ export function BlockNoteSidebar() {
                   });
                   await SyncedQueue(nanoPageId, "Items", "update");
 
-                  toast.success("Page already present successfully updated", {
+                  toast.success("updated", {
                     description: nanoPageId,
+                    duration: 100,
                   });
                 } else {
-                  toast.error("Something went wrong", {
+                  toast.error("Something went wrong to save or update doc", {
                     description: err.message,
+                    duration: 7000,
                   });
                 }
               }
