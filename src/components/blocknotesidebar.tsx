@@ -84,6 +84,8 @@ export function BlockNoteSidebar() {
     pageContent,
     pagePriority,
     setPagePriority,
+    pageIcon,
+    setPageIcon,
     nanoPageId,
     SyncedQueue,
     setIsReadingMode,
@@ -160,13 +162,15 @@ export function BlockNoteSidebar() {
     <Sheet open={openSidebar} onOpenChange={setOpenSidebar}>
       <DialogTitle className="hidden">Edit Page</DialogTitle>
       <SheetContent className="w-full sm:max-w-1/2 overflow-y-auto overflow-x-hidden">
-        <input
-          inert={isReadingMode ? true : false}
-          className="text-xl font-bold w-full bg-transparent focus:outline-none px-2"
-          value={pageTitle}
-          placeholder="Page Title"
-          onChange={(e) => setPageTitle(e.target.value)}
-        />
+        <div>
+          <input
+            inert={isReadingMode ? true : false}
+            className="text-xl font-bold w-full bg-transparent focus:outline-none px-2"
+            value={pageTitle}
+            placeholder="Page Title"
+            onChange={(e) => setPageTitle(e.target.value)}
+          />
+        </div>
         <input
           inert={isReadingMode ? true : false}
           className="w-full bg-transparent focus:outline-none px-2 text-muted-foreground text-sm"
@@ -289,6 +293,12 @@ export function BlockNoteSidebar() {
           )}
         </div>
         <SheetFooter>
+          <input
+            type="text"
+            value={pageIcon ?? ""}
+            placeholder="Page Icon"
+            onChange={(e) => setPageIcon(e.target.value)}
+          />
           <Button
             inert={isReadingMode ? true : false}
             type="submit"
@@ -299,7 +309,7 @@ export function BlockNoteSidebar() {
 
               setPageContent(currentContent);
               try {
-                await db.Items.add({
+                const items: any = {
                   id: nanoPageId,
                   title: pageTitle,
                   guess: pageGuess,
@@ -309,16 +319,21 @@ export function BlockNoteSidebar() {
                   classId: pageClass,
                   bookId: pageBook,
                   priority: pagePriority,
-                });
+                };
+
+                if (typeof pageIcon === "string" && pageIcon.trim() !== "") {
+                  items.pageIcon = pageIcon;
+                }
+                await db.Items.add(items);
                 await SyncedQueue(nanoPageId, "Items", "add");
                 toast.success("add", {
                   description: nanoPageId,
-                  duration: 100,
+                  duration: 500,
                 });
               } catch (error) {
                 const err = error as { name: string; message: string };
                 if (err.name === "ConstraintError") {
-                  await db.Items.update(nanoPageId, {
+                  const changes: any = {
                     id: nanoPageId,
                     title: pageTitle,
                     guess: pageGuess,
@@ -327,7 +342,11 @@ export function BlockNoteSidebar() {
                     classId: pageClass,
                     bookId: pageBook,
                     priority: pagePriority,
-                  });
+                  };
+                  if (typeof pageIcon === "string" && pageIcon.trim() !== "") {
+                    changes.pageIcon = pageIcon;
+                  }
+                  await db.Items.update(nanoPageId, changes);
                   await SyncedQueue(nanoPageId, "Items", "update");
 
                   toast.success("updated", {

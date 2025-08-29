@@ -10,6 +10,7 @@ export type PageItem = {
   classId: string;
   bookId: string;
   priority: string;
+  pageIcon?: string;
 };
 
 export type ClassorBook = {

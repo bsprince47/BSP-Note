@@ -36,6 +36,8 @@ type GlobalStore = {
   setPageBook: (val: string) => void;
   pagePriority: string;
   setPagePriority: (val: string) => void;
+  pageIcon: string;
+  setPageIcon: (val: string) => void;
 
   SyncedQueue: (
     id: string,
@@ -85,6 +87,8 @@ export const useGlobalStore = create<GlobalStore>((set) => ({
   setPageBook: (val) => set({ pageBook: val }),
   pagePriority: "",
   setPagePriority: (val) => set({ pagePriority: val }),
+  pageIcon: "",
+  setPageIcon: (val) => set({ pageIcon: val }),
 
   // 💾 Save + queue
   SyncedQueue: async (id, table, type = "add") => {

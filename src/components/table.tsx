@@ -57,6 +57,7 @@ export default function Table() {
     selectedFilter,
     renderRangeData,
     isRenderingMode,
+    setPageIcon,
   } = useGlobalStore();
   const [pageIndex, setPageIndex] = useState(0);
   const fulldata = useFilteredPages(selectedFilter, pageIndex);
@@ -111,6 +112,7 @@ export default function Table() {
                   );
                   setPageClass(item.classId);
                   setPageBook(item.bookId);
+                  setPageIcon(item.pageIcon as any);
                 }}
               >
                 Open page
@@ -161,7 +163,15 @@ export default function Table() {
               e.currentTarget.children[1].classList.toggle("blur-sm");
             }}
           >
-            <DbIcon keyName={item.bookId} />
+            {item.pageIcon ? (
+              <img
+                src={item.pageIcon}
+                className="h-7 aspect-square"
+                alt="image"
+              />
+            ) : (
+              <DbIcon keyName={item.bookId} />
+            )}
             <span className={`${isRenderingMode ? "blur-sm" : null}`}>
               {item.title}
             </span>

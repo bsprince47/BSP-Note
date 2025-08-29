@@ -96,6 +96,7 @@ async function FirestoreToDexie() {
             classId: data.classId || "",
             bookId: data.bookId || "",
             priority: data.priority || "low",
+            pageIcon: data.pageIcon || null,
           });
           success = true;
         }
